@@ -18,42 +18,60 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/speedContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:background="#1E1E1E"
-        android:orientation="vertical"
         android:padding="24dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleText">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/speed_label"
-            android:textColor="#BBBBBB"
-            android:textSize="14sp" />
+        <ProgressBar
+            android:id="@+id/speedometer"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:indeterminate="false"
+            android:max="180"
+            android:progress="0"
+            android:progressDrawable="@drawable/circular_progress" />
 
-        <TextView
-            android:id="@+id/speedValue"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/speed_format"
-            android:textColor="#4CAF50"
-            android:textSize="64sp"
-            android:textStyle="bold"
-            tools:text="120" />
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/speed_unit"
-            android:textColor="#BBBBBB"
-            android:textSize="18sp" />
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/speed_label"
+                android:textColor="#BBBBBB"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/speedValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/speed_format"
+                android:textColor="#4CAF50"
+                android:textSize="64sp"
+                android:textStyle="bold"
+                tools:text="120" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/speed_unit"
+                android:textColor="#BBBBBB"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </FrameLayout>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

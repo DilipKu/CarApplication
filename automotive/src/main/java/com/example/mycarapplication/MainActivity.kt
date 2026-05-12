@@ -1,46 +1,45 @@
 package com.example.mycarapplication
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var speedValue: TextView
+    private lateinit var speedometer: ProgressBar
     private lateinit var fuelValue: TextView
     private lateinit var fuelProgress: ProgressBar
     private lateinit var batteryValue: TextView
     private lateinit var batteryProgress: ProgressBar
 
     private val handler = Handler(Looper.getMainLooper())
+    private var speedAnimator: ValueAnimator? = null
+
     private val mockUpdateRunnable = object : Runnable {
         override fun run() {
             updateMockData()
-            handler.postDelayed(this, 1000)
+            handler.postDelayed(this, 1500) // Slightly longer interval to allow animation to shine
         }
     }
 
     private var currentSpeed = 0
+    private var targetSpeed = 0
     private var currentFuel = 75
     private var currentBattery = 90
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Log.d("TEST_APP", "MainActivity Opened")
-
-        Toast.makeText(this, "MainActivity Opened", Toast.LENGTH_LONG).show()
         setContentView(R.layout.activity_main)
 
-        Toast.makeText(this, "MainActivity Opened", Toast.LENGTH_LONG).show()
-
         speedValue = findViewById(R.id.speedValue)
+        speedometer = findViewById(R.id.speedometer)
         fuelValue = findViewById(R.id.fuelValue)
         fuelProgress = findViewById(R.id.fuelProgress)
         batteryValue = findViewById(R.id.batteryValue)
@@ -50,9 +49,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateMockData() {
-        // Randomly adjust speed
-        currentSpeed += Random.nextInt(-5, 6)
-        currentSpeed = currentSpeed.coerceIn(0, 180)
+        // Randomly adjust target speed
+        targetSpeed += Random.nextInt(-15, 20)
+        targetSpeed = targetSpeed.coerceIn(0, 180)
+
+        // Animate from currentSpeed to targetSpeed
+        animateSpeed(currentSpeed, targetSpeed)
+        currentSpeed = targetSpeed
 
         // Slowly decrease fuel and battery
         if (Random.nextFloat() > 0.95f) currentFuel -= 1
@@ -61,9 +64,7 @@ class MainActivity : AppCompatActivity() {
         currentFuel = currentFuel.coerceIn(0, 100)
         currentBattery = currentBattery.coerceIn(0, 100)
 
-        // Update UI
-        speedValue.text = getString(R.string.speed_format, currentSpeed)
-        
+        // Update UI for fuel and battery
         fuelValue.text = getString(R.string.percent_format, currentFuel)
         fuelProgress.progress = currentFuel
 
@@ -71,8 +72,23 @@ class MainActivity : AppCompatActivity() {
         batteryProgress.progress = currentBattery
     }
 
+    private fun animateSpeed(from: Int, to: Int) {
+        speedAnimator?.cancel()
+        speedAnimator = ValueAnimator.ofInt(from, to).apply {
+            duration = 1000
+            interpolator = AccelerateDecelerateInterpolator()
+            addUpdateListener { animator ->
+                val animatedValue = animator.animatedValue as Int
+                speedValue.text = getString(R.string.speed_format, animatedValue)
+                speedometer.progress = animatedValue
+            }
+            start()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(mockUpdateRunnable)
+        speedAnimator?.cancel()
     }
 }
