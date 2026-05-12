@@ -1,0 +1,2 @@
+com.example.mycarapplication.shared
+xml automotive_app_desc

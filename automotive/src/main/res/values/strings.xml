@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My Car Application</string>
+    <string name="vehicle_dashboard">Vehicle Dashboard</string>
+    <string name="speed_label">SPEED</string>
+    <string name="speed_unit">km/h</string>
+    <string name="fuel_level_label">FUEL LEVEL</string>
+    <string name="battery_label">BATTERY</string>
+    <string name="percent_format">%1$d%%</string>
+    <string name="speed_format">%1$d</string>
+</resources>
